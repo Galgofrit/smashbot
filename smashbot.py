@@ -9,6 +9,12 @@ import time
 #  FRAME_RATE = 2
 FRAME_RATE = 1/60 # 60 FPS
 
+Key = collections.namedtuple('Key', ['name', 'code']) # Store controller button mappings with description
+
+# Key mapping
+class KEYS:
+    SHIELD = Key('shield', vgamepad.XUSB_BUTTON.LEFT_TRIGGER)
+
 
 # Logger
 logger = logging.getLogger(__name__)
@@ -17,13 +23,6 @@ logging.basicConfig(
     format='%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s',
     datefmt="%H:%M:%S",
 )
-
-
-Key = collections.namedtuple('Key', ['name', 'code']) # Store controller button mappings with description
-
-class KEYS:
-    SHIELD = Key('shield', vgamepad.XUSB_BUTTON.XUSB_GAMEPAD_RIGHT_SHOULDER)
-
 
 def alternate_key_state():
     while True:
