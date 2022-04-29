@@ -6,14 +6,13 @@ import vgamepad
 import pprint
 import time
 
-#  FRAME_RATE = 2
 FRAME_RATE = 1/60 # 60 FPS
 
 Key = collections.namedtuple('Key', ['name', 'code']) # Store controller button mappings with description
 
 # Key mapping
 class KEYS:
-    SHIELD = Key('shield', vgamepad.XUSB_BUTTON.LEFT_TRIGGER)
+    SHIELD = Key('shield', vgamepad.DS4_BUTTONS.DS4_BUTTON_TRIGGER_RIGHT)
 
 
 # Logger
@@ -73,7 +72,7 @@ def main():
             \n\tspam_keys={pprint.pformat(spam_keys)}')
 
     logger.info('Creating gamepad...')
-    gamepad = vgamepad.VX360Gamepad()
+    gamepad = vgamepad.VDS4Gamepad()
 
     if not gamepad:
         logger.error('Could not create gamepad.')
