@@ -5,6 +5,7 @@ import logging
 import vgamepad
 import pprint
 import time
+import random
 
 FRAME_RATE = 1/60 # 60 FPS
 
@@ -42,6 +43,14 @@ def run_bot(gamepad, randomize_di, spam_keys):
                 else:
                     logger.debug(f'Releasing key \'{key.name}\'.')
                     gamepad.release_button(button=key.code) 
+
+            if randomize_di:
+                x = random.choice([0, 128, 255])
+                y = 0
+                logger.debug(f'DI ({x}, {y})')
+                gamepad.left_joystick(x_value=x, y_value=y)
+                gamepad.update()
+
 
             gamepad.update()
             time.sleep(FRAME_RATE)
@@ -85,13 +94,6 @@ def main():
 
     logger.info('Creating gamepad...')
     gamepad = vgamepad.VDS4Gamepad()
-
-    if args.randomize_di:
-        x = 0
-        y = 255
-        logger.info(f'DI ({x}, {y})')
-        gamepad.left_joystick(x_value=x, y_value=y)
-        gamepad.update()
 
     if not gamepad:
         logger.error('Could not create gamepad.')
