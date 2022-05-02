@@ -62,6 +62,8 @@ def run_bot(gamepad, randomize_di, spam_keys):
             logger.debug(f'Releasing key \'{key.name}\'.')
             gamepad.release_button(button=key.code)
 
+        gamepad.left_joystick(x_value=128, y_value=128)
+        gamepad.right_joystick(x_value=128, y_value=128)
         gamepad.reset()
         gamepad.update()
 
