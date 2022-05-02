@@ -13,7 +13,7 @@ Key = collections.namedtuple('Key', ['name', 'code']) # Store controller button 
 # Key mapping
 class KEYS:
     SHIELD = Key('shield', vgamepad.DS4_BUTTONS.DS4_BUTTON_TRIGGER_RIGHT)
-
+    GRAB = Key('grab', vgamepad.DS4_BUTTONS.DS4_BUTTON_SHOULDER_LEFT)
 
 # Logger
 logger = logging.getLogger(__name__)
@@ -48,12 +48,21 @@ def run_bot(gamepad, randomize_di, spam_keys):
 
     except KeyboardInterrupt:
         logger.info('Stopping.')
+
+        for key in spam_keys:
+            logger.debug(f'Releasing key \'{key.name}\'.')
+            gamepad.release_button(button=key.code)
+
+        gamepad.reset()
+        gamepad.update()
+
         return
 
 
 def main():
     parser = argparse.ArgumentParser(description='Run smash bot for practicing.')
     parser.add_argument('-s', '--spam-shield', action='store_true', default=False, help='spam shield and airdodge')
+    parser.add_argument('-g', '--spam-grab', action='store_true', default=False, help='spam grab and airdodge')
     parser.add_argument('-di', '--randomize-di', action='store_true', default=False, help='randomize DI')
     parser.add_argument('-dbg', '--debug', action='store_true', default=False, help='run in debug mode')
 
@@ -64,6 +73,9 @@ def main():
     if args.spam_shield:
         spam_keys.append(KEYS.SHIELD)
 
+    if args.spam_grab:
+        spam_keys.append(KEYS.GRAB)
+
     if args.debug:
         logger.setLevel(logging.DEBUG)
         logger.debug('Running in DEBUG mode')
@@ -73,6 +85,13 @@ def main():
 
     logger.info('Creating gamepad...')
     gamepad = vgamepad.VDS4Gamepad()
+
+    if args.randomize_di:
+        x = 0
+        y = 255
+        logger.info(f'DI ({x}, {y})')
+        gamepad.left_joystick(x_value=x, y_value=y)
+        gamepad.update()
 
     if not gamepad:
         logger.error('Could not create gamepad.')
